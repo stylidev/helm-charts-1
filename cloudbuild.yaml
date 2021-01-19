@@ -1,0 +1,30 @@
+steps:
+    ### Kibana Deploy
+  - id: 'Kibana-helm-deploy'
+    name: 'gcr.io/$PROJECT_ID/helm'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=${_CLOUDSDK_COMPUTE_ZONE}'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLOUDSDK_CONTAINER_CLUSTER}'
+      - 'KUBECONFIG=/kube/config'
+    args: [
+      'upgrade', '--install', 'kibana-$_STYLI_ENV',
+      '--namespace', '$_STYLI_ENV', '-f', 'kibana/$_STYLI_ENV.values.yaml',
+      'kibana'
+    ]
+
+
+    ### Elastic Deploy
+  - id: 'Elastic-helm-deploy'
+    name: 'gcr.io/$PROJECT_ID/helm'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=${_CLOUDSDK_COMPUTE_ZONE}'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=${_CLOUDSDK_CONTAINER_CLUSTER}'
+      - 'KUBECONFIG=/kube/config'
+    args: [
+      'upgrade', '--install', 'elastic-$_STYLI_ENV',
+      '--namespace', '$_STYLI_ENV', '-f', 'elasticsearch/$_STYLI_ENV.values.yaml',
+      'elasticsearch'
+    ]
+
+
+timeout: 1200s
